@@ -1,0 +1,241 @@
+package com.ATM;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+
+/**
+ *  This is the main class of the project
+ *  EX1 account Number: 1234
+ *          Pin Number: 5555
+ *  EX2 account Number: 57
+ *          Pin Number: 661
+ * @author Kyle D. Williams
+ */
+public final class ATM {
+
+    public final bankingDatabase dataBase;
+    private Account account;
+
+    public static void main(String[] kdgwill) {
+        ATM atm = new ATM();
+    }
+
+    public ATM() {
+        dataBase = new bankingDatabase();
+        //TEST CASE
+        dataBase.createTestAccount(1234, 5555, 1.25f, 0.5f);
+        dataBase.createTestAccount(57, 661, 348795f, Float.MAX_VALUE);
+
+        while (true) {
+            welcome();
+            if (account == null) {
+                continue;
+            }
+            JOptionPane.showMessageDialog(null, "Welcome valued customer to the Ramdeen International Banking!", "Ramdeen International", JOptionPane.INFORMATION_MESSAGE);
+
+            mainMenu();
+        }
+    }
+
+    /*
+     * This is used to Make sure that all values entered are numbers and nothing elese
+     */
+    public boolean NumbersOnly(String input) {
+        Pattern p = Pattern.compile("[A-Z,a-z,&%$#@!()*^]");
+        Matcher m = p.matcher(input);
+        if (m.find()) {
+            JOptionPane.showMessageDialog(null, "Please enter only numbers");
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * This is the Welcome Screen
+     */
+    private void welcome() {
+        int welcome = JOptionPane.showConfirmDialog(null, "Welcome to Ramdeen International Banking,the best banking in Trinidad!\n Do You Currently Have an Account Opened With Us?", "Welcome", JOptionPane.YES_NO_CANCEL_OPTION);
+        switch (welcome) {
+            case JOptionPane.YES_OPTION:
+                login();
+                break;
+            case JOptionPane.NO_OPTION:
+                newAccount();
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Shutting Down");
+                System.exit(0);
+                break;
+        }
+    }
+
+    /*
+     * This Section is for New Account Creation
+     */
+    private void newAccount() {
+        int nA = JOptionPane.showConfirmDialog(null, "Would you Like to Make a New Account With Us?", "New Account", JOptionPane.YES_NO_OPTION);
+        if (JOptionPane.NO_OPTION == nA) {
+            JOptionPane.showMessageDialog(null, "Returning To Previous Screen");
+            welcome();
+        } else {
+            String acc1;
+            String pin1;
+            while (true) {
+                acc1 = JOptionPane.showInputDialog(null, "Please enter A New Account Number below:", "Account Number", JOptionPane.QUESTION_MESSAGE);
+                if (!NumbersOnly(acc1)) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+            while (true) {
+                pin1 = JOptionPane.showInputDialog(null, "Please enter A New PIN Number below:", "PIN Number", JOptionPane.QUESTION_MESSAGE);
+                if (!NumbersOnly(pin1)) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+            dataBase.createAccount(Integer.parseInt(acc1), Integer.parseInt(pin1));
+            JOptionPane.showInputDialog(null, "Congratulations\nThe Account: " + acc1 + "\nHas been Created Sucessfully\nProceeding to Login...", "Account Creation Successful", JOptionPane.QUESTION_MESSAGE);
+            account = dataBase.getAccount(Integer.parseInt(acc1));
+        }
+    }
+
+    /*
+     * This Section is to Log In Pre-Existing Users
+     */
+    public void login() {
+        int attempt = 0;
+        while (true) {
+            String accS = null;
+            while (true) {
+                accS = JOptionPane.showInputDialog(null, "Please enter your Account Number below:", "Account Number", JOptionPane.QUESTION_MESSAGE);
+                if (!NumbersOnly(accS)) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+            String pinS = null;
+            while (true) {
+                pinS = JOptionPane.showInputDialog(null, "Please enter your PIN Number below:", "PIN Number", JOptionPane.QUESTION_MESSAGE);
+                if (!NumbersOnly(pinS)) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+
+            int acc = Integer.parseInt(accS);
+            int pin = Integer.parseInt(pinS);
+            account = dataBase.getAccount(acc);
+            if (account != null) {
+                if (account.getPin() == pin) {
+                    break;
+                }
+            }
+            attempt++;
+            if (attempt < 5) {
+                JOptionPane.showMessageDialog(null, "Either the Account or Pin Number provided was incorrect. \n Attempt " + attempt + "/5", "Incorrect Account Number or Pin Number", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Either the Account or Pin Number provided was incorrect. \n Max Login Attempts achieved.", "Incorrect Account Number or Pin Number", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Program Ending...", "Have A Nice Day", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
+        }
+    }
+
+    /*
+     * This is the Main Body of the Banking Program
+     */
+    public void mainMenu() {
+        while (true) {
+            String choices;
+
+            while (true) {
+                choices = JOptionPane.showInputDialog(null, "Please make a selection from the following:"
+                        + " \n Press 1 for Checking (Current Balance: " + account.getChecking() + ")"
+                        + " \n Press 2 for Savings (Current balance: " + account.getSavings() + ")"
+                        + " \n Press 3 to Exit", "Main Menu", JOptionPane.PLAIN_MESSAGE);
+
+                if (choices == null || !NumbersOnly(choices)) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+            int selection = Integer.parseInt(choices);
+
+
+            if (selection < 3 && selection > 0) {
+                float accType;
+                String acc;
+                boolean loop = true;
+                while (loop) {
+                    //This Section properly updates the balance of the Account Type Selected
+                    if (selection == 1) {
+                        accType = account.getChecking();
+                        acc = "Checking Account";
+                    } else {
+                        accType = account.getSavings();
+                        acc = "Savings Account";
+                    }
+
+                    //This Section Handles Withdrawl and Depositing 
+                    JOptionPane.showMessageDialog(null, "Your current Balance is: $" + accType);
+                    String option3 = JOptionPane.showInputDialog(acc + "$" + accType + "\n\nPlease choose your option \nPress 1 to Deposit Money \nPress 2 to Withdraw Money \nPress 3 to Cancel");
+                    switch (Integer.parseInt(option3)) {
+                        case 1:
+                            String amount1 = null;
+                            while (true) {
+                                amount1 = JOptionPane.showInputDialog("Please enter the amount of money you want to deposit");
+                                if (!NumbersOnly(amount1)) {
+                                    continue;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            if (selection == 1) {
+                                account.depositToChecking(Integer.parseInt(amount1));
+                            } else {
+                                account.depositToSavings(Integer.parseInt(amount1));
+                            }
+                            break;
+                        case 2:
+                            String amount2 = null;
+                            while (true) {
+                                amount2 = JOptionPane.showInputDialog("Please enter the amount of money you want to withdraw");
+                                if (!NumbersOnly(amount2)) {
+                                    continue;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            if (selection == 1) {
+                                account.withdrawFromChecking(Integer.parseInt(amount2));
+                            } else {
+                                account.withdrawFromSavings(Integer.parseInt(amount2));
+                            }
+                            break;
+                        case 3:
+                            JOptionPane.showMessageDialog(null, "Selection Canceled Returning to Main Menu");
+                            loop = false;
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Invalid Request");
+                    }
+                }
+            } else if (selection == 3) {
+                JOptionPane.showMessageDialog(null, "Thank You for using Ramdeen International Banking!\nHave a Plesent Day", "GoodBye", JOptionPane.PLAIN_MESSAGE);
+                account = null;
+                break;
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid Request");
+            }
+        }
+    }
+}

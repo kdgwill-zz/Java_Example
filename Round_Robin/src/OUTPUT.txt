@@ -1,0 +1,69 @@
+Run 1
+
+***********Robin MEASUREMENTS*********
+** Ratio of Processing                : 100:200 milliseconds
+** Context Switches                   : 4 switches 
+** Average Waiting Time               : 1956 ns 
+** Average Turnaround Time            : 436 ns 
+** CPU Throughput                     : 7.2833215E-4 ns 
+** Estimated CPU Utilization          ~ 25 % 
+***********HARDWARE MEASUREMENTS*********
+** Total CPU Usage                    : 0.0%
+** Total Process Time                 : 155.0 ns 
+**************************************
+
+Run 2
+
+***********Robin MEASUREMENTS*********
+** Ratio of Processing                : 4:8 milliseconds
+** Context Switches                   : 4 switches 
+** Average Waiting Time               : 43 ns 
+** Average Turnaround Time            : 15 ns 
+** CPU Throughput                     : 0.025210084 ns 
+** Estimated CPU Utilization          ~ 25 % 
+***********HARDWARE MEASUREMENTS*********
+** Total CPU Usage                    : 0.0%
+** Total Process Time                 : 155.0 ns 
+**************************************
+
+Run 3
+
+***********Robin MEASUREMENTS*********
+** Ratio of Processing                : 1:3 milliseconds
+** Context Switches                   : 24 switches 
+** Average Waiting Time               : 75 ns 
+** Average Turnaround Time            : 19 ns 
+** CPU Throughput                     : 0.006956522 ns 
+** Estimated CPU Utilization          ~ 4 % 
+***********HARDWARE MEASUREMENTS*********
+** Total CPU Usage                    : 9.0%
+** Total Process Time                 : 155.0 ns 
+**************************************
+
+Run 4
+
+***********Robin MEASUREMENTS*********
+** Ratio of Processing                : 1:2 milliseconds
+** Context Switches                   : 1071 switches 
+** Average Waiting Time               : 4419558 ns 
+** Average Turnaround Time            : 2237 ns 
+** CPU Throughput                     : 5.440126E-7 ns 
+** Estimated CPU Utilization          ~ 0 % 
+***********HARDWARE MEASUREMENTS*********
+** Total CPU Usage                    : 9.0%
+** Total Process Time                 : 171.0 ns 
+**************************************
+
+ FINAL MEASUREMENTS
+
+***********HARDWARE MEASUREMENTS*********
+** Total CPU count                    : 4
+** Total CPU Usage                    : 40.0%
+** Total Process Time                 : 171.0 ns 
+** Actual total free system memory    : 1794272 KB
+** Actual total used system memory    : 2398488 KB
+** Total free system memory           : 1585476 KB
+** System Random Access Memory        : 4096 MB
+** Total system memory                : 4192760 KB
+** Total used system memory           : 2607284 KB
+**************************************
